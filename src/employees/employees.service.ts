@@ -59,7 +59,9 @@ export class EmployeesService {
     return updated;
   }
   async add(data: AddEmployeeDto): Promise<any> {
-    return this.employeeRepository.save(data);
+    const saved = await this.employeeRepository.save(data);
+    await this.modifyEmployeeInCache(saved.id, data);
+    return saved;
   }
   async getAllByFilter(filter: string, value: string): Promise<Employee[]> {
     return this.employeeRepository.getAllBy(filter, value);
