@@ -9,5 +9,5 @@ export class Employee extends BaseEntity {
   @Column()
   salary: number;
   @Column()
-  recruiterId: number;
+  assignedRecruiter: number;
 }

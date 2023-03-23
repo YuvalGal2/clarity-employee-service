@@ -8,14 +8,14 @@ import { EmployeeFilters } from '../models/employee-filters.enum';
 
 @Injectable()
 export class FilterTypeValidatorPipe implements PipeTransform<number, number> {
-  readonly allowedFilters: any = [
+  private readonly allowedFilters: any = [
     EmployeeFilters.ID,
     EmployeeFilters.NAME,
     EmployeeFilters.SALARY,
     EmployeeFilters.RECRUITERID,
   ];
 
-  private isFilterValid(filterName: string) {
+  private isFilterValid(filterName: string): number {
     filterName = filterName.toLowerCase();
     return this.allowedFilters.indexOf(filterName); // will return -1 if not found
   }

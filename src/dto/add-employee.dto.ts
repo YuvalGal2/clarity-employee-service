@@ -1,12 +1,12 @@
-import { IsInt, IsNumber, IsString, Length } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { IsNumber, IsString, Length } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class AddEmployeeDto {
   @Length(4)
   name: string;
   @Type(() => Number)
-  @IsInt()
+  @IsNumber()
   salary: number;
   @IsString()
-  recruiterId: number;
+  assignedRecruiter: number;
 }

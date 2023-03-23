@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 import { Employee } from './employee.entity';
+import { UpdateEmployeeDto } from '../dto/update-employee.dto';
 
 @Injectable() // here
 export class EmployeeRepository extends Repository<Employee> {
@@ -8,7 +9,15 @@ export class EmployeeRepository extends Repository<Employee> {
     super(Employee, dataSource.createEntityManager());
   }
 
-  async updateFields(fieldsArr) {}
+  async updateFields(fields: UpdateEmployeeDto): Promise<any> {
+    // needs to check if recruiter has access to this id. probably using some kind of auth service.
+    const { salary, id, name } = fields;
+    const ack = await this.update({ id }, { salary, name });
+    if (ack.affected > 0) {
+      return ack;
+    }
+    throw new HttpException(`Could not update employee ${id}`, 500);
+  }
   async getAllBy(filter: string, filterValue: any): Promise<Employee[]> {
     const res = await this.createQueryBuilder()
       .where(`${filter} = :filterValue`, { filterValue: filterValue })
