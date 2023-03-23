@@ -1,6 +1,6 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { Employee } from './employee.entity';
+import { Employee } from '../entities/employee.entity';
 import { UpdateEmployeeDto } from '../dto/update-employee.dto';
 
 @Injectable() // here
