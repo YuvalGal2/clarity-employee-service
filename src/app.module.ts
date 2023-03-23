@@ -2,21 +2,19 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EmployeesModule } from './employees/employees.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { CachingModule } from './cache/caching.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmAsyncConfig } from './config/typeorm.config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'restaurant',
-      autoLoadEntities: true, // dev only
-      synchronize: true, // dev only
+    ConfigModule.forRoot({
+      envFilePath: ['.env'],
+      isGlobal: true,
+      cache: false,
     }),
+    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     EmployeesModule,
     CachingModule,
   ],

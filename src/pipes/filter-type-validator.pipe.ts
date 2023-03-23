@@ -19,7 +19,7 @@ export class FilterTypeValidatorPipe implements PipeTransform<number, number> {
     filterName = filterName.toLowerCase();
     return this.allowedFilters.indexOf(filterName); // will return -1 if not found
   }
-  transform(value: any, metadata: ArgumentMetadata) {
+  transform(value: any, metadata: ArgumentMetadata): any | BadRequestException {
     if (!value) {
       throw new BadRequestException('Value is required.');
     }

@@ -1,4 +1,4 @@
-import { IsNumber, IsString, Length } from 'class-validator';
+import { IsNumber, IsString, Length, MinLength } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class AddEmployeeDto {
@@ -7,6 +7,7 @@ export class AddEmployeeDto {
   @Type(() => Number)
   @IsNumber()
   salary: number;
+  @MinLength(1)
   @IsString()
   assignedRecruiter: number;
 }

@@ -11,7 +11,7 @@ export class CacheService {
     }
   }
   async set(key: string, value: any): Promise<void> {
-    console.log('cache updated!');
+    // console.log('cache updated!');
     return await this.cacheManager.set(key, value);
   }
 }

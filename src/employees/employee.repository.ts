@@ -10,7 +10,7 @@ export class EmployeeRepository extends Repository<Employee> {
   }
 
   async updateFields(fields: UpdateEmployeeDto): Promise<any> {
-    // needs to check if recruiter has access to this id. probably using some kind of auth service.
+    // needs to check if recruiter has access to this id. probably using some kind of auth service. - out of scope.
     const { salary, id, name } = fields;
     const ack = await this.update({ id }, { salary, name });
     if (ack.affected > 0) {

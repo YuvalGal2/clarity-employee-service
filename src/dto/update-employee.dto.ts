@@ -1,5 +1,5 @@
-import { IsInt, isNumber, IsNumber, IsString, Length } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { IsInt, IsString, Length } from 'class-validator';
+import { Type } from 'class-transformer';
 import { Optional } from '@nestjs/common';
 
 export class UpdateEmployeeDto {

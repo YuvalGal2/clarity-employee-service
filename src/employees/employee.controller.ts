@@ -22,6 +22,7 @@ export class EmployeeController {
   update(@Body() data: UpdateEmployeeDto) {
     return this.employeesService.update(data);
   }
+
   @Get(':filter/:value')
   async getEmployeesByFilter(
     @Param('filter', FilterTypeValidatorPipe) filterName: string,

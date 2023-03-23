@@ -1,10 +1,9 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmployeeRepository } from './employee.repository';
 import { Employee } from './employee.entity';
 import { AddEmployeeDto } from '../dto/add-employee.dto';
 import { UpdateEmployeeDto } from '../dto/update-employee.dto';
-import { Cache } from 'cache-manager';
 import { CacheService } from '../cache/cache.service';
 
 @Injectable()
@@ -30,10 +29,10 @@ export class EmployeesService {
       'allEmployees',
     );
     if (allEmployeesCache) {
-      console.log('Cache:Loaded!');
+      // console.log('Cache:Loaded!');
       return allEmployeesCache;
     }
-    console.log('cache not loaded!');
+    // console.log('cache not loaded! - probably ttl');
   }
   private async fillCache(key, employees: Employee[]): Promise<void> {
     await this.cacheService.set(String(key), employees);
