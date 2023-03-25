@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('employees')
-export class Employee extends BaseEntity {
+export class EmployeeEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
   @Column()
@@ -11,3 +11,4 @@ export class Employee extends BaseEntity {
   @Column()
   assignedRecruiter: number;
 }
+export default EmployeeEntity;

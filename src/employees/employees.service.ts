@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmployeeRepository } from './employee.repository';
-import { Employee } from '../entities/employee.entity';
+import { EmployeeEntity } from '../entities/employee.entity';
 import { AddEmployeeDto } from '../dto/add-employee.dto';
 import { UpdateEmployeeDto } from '../dto/update-employee.dto';
 import { CacheService } from '../cache/cache.service';
@@ -34,26 +34,28 @@ export class EmployeesService {
     }
     // console.log('cache not loaded! - probably ttl');
   }
-  private async fillCache(key, employees: Employee[]): Promise<void> {
+  private async fillCache(key, employees: EmployeeEntity[]): Promise<void> {
     await this.cacheService.set(String(key), employees);
   }
   private async modifyEmployeeInCache(id: number, newData: any) {
     const { salary, name, assignedRecruiter } = newData;
-    const cache: Employee[] = await this.employeeCache();
+    const cache: EmployeeEntity[] = await this.employeeCache();
     if (cache) {
-      const newCache: Employee[] = cache.map((employee: Employee) => {
-        if (employee.id === id) {
-          employee.salary = salary;
-          employee.name = name;
-          employee.assignedRecruiter = assignedRecruiter;
-        }
-        return employee;
-      });
+      const newCache: EmployeeEntity[] = cache.map(
+        (employee: EmployeeEntity) => {
+          if (employee.id === id) {
+            employee.salary = salary;
+            employee.name = name;
+            employee.assignedRecruiter = assignedRecruiter;
+          }
+          return employee;
+        },
+      );
       await this.cacheService.set('allEmployees', newCache);
     }
   }
 
-  async update(data: UpdateEmployeeDto): Promise<Employee> {
+  async update(data: UpdateEmployeeDto): Promise<EmployeeEntity> {
     const updated = await this.employeeRepository.updateFields(data);
     await this.modifyEmployeeInCache(data.id, data);
     return updated;
@@ -63,7 +65,10 @@ export class EmployeesService {
     await this.modifyEmployeeInCache(saved.id, data);
     return saved;
   }
-  async getAllByFilter(filter: string, value: string): Promise<Employee[]> {
+  async getAllByFilter(
+    filter: string,
+    value: string,
+  ): Promise<EmployeeEntity[]> {
     return this.employeeRepository.getAllBy(filter, value);
   }
 }

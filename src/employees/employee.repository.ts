@@ -1,12 +1,12 @@
 import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { Employee } from '../entities/employee.entity';
+import { EmployeeEntity } from '../entities/employee.entity';
 import { UpdateEmployeeDto } from '../dto/update-employee.dto';
 
 @Injectable() // here
-export class EmployeeRepository extends Repository<Employee> {
+export class EmployeeRepository extends Repository<EmployeeEntity> {
   constructor(private dataSource: DataSource) {
-    super(Employee, dataSource.createEntityManager());
+    super(EmployeeEntity, dataSource.createEntityManager());
   }
 
   async updateFields(fields: UpdateEmployeeDto): Promise<any> {
@@ -18,7 +18,7 @@ export class EmployeeRepository extends Repository<Employee> {
     }
     throw new HttpException(`Could not update employee ${id}`, 500);
   }
-  async getAllBy(filter: string, filterValue: any): Promise<Employee[]> {
+  async getAllBy(filter: string, filterValue: any): Promise<EmployeeEntity[]> {
     const res = await this.createQueryBuilder()
       .where(`${filter} = :filterValue`, { filterValue: filterValue })
       .getMany();

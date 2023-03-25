@@ -5,7 +5,6 @@ import { EmployeesModule } from './employees/employees.module';
 import { CachingModule } from './cache/caching.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { typeOrmAsyncConfig } from './typeorm.config';
 import dataSource from './typeorm.config';
 
 @Module({
@@ -15,7 +14,11 @@ import dataSource from './typeorm.config';
       isGlobal: true,
       cache: false,
     }),
-    TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: dataSource,
+      inject: [ConfigService],
+    }),
     EmployeesModule,
     CachingModule,
   ],

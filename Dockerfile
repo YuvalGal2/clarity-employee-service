@@ -3,17 +3,19 @@ FROM node:18-alpine
 # Set the working directory to /app
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
+# Copy the package.json and package-lock.json files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --only=production
-RUN npm run typeorm migration:run
+# Install app dependencies
+RUN npm install --production
 
-# Copy the application code to the working directory
-COPY . .
 
+# Copy all files from the dist folder
+COPY ./ ./
+COPY .env.docker .env
+
+# Expose the port on which the app will run
 EXPOSE 8000
-# Start the NestJS application
-CMD ["npm", "run", "start:prod"]
 
+CMD PWD
+CMD npm run start:prod

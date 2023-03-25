@@ -1,37 +1,22 @@
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  TypeOrmModuleAsyncOptions,
-  TypeOrmModuleOptions,
-} from '@nestjs/typeorm';
-import { DataSource, DataSourceOptions, getMetadataArgsStorage } from 'typeorm';
+import { DataSourceOptions } from 'typeorm';
+import EmployeeEntity from './entities/employee.entity';
 import { config } from 'dotenv';
+import { CreateEmployeesTable1679767538379 } from '../migrations/1679767538379-CreateEmployeesTable';
 import * as process from 'process';
-config(); // trick to make both the migration and the factory to work together.
-const entities = getMetadataArgsStorage().tables.map((table) => table.target);
+config();
 
-export const settings: DataSourceOptions = {
-  type: process.env.DB_DRIVER as any,
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  database: process.env.DB_DATABASE_NAME,
-  username: process.env.DB_USERNAME,
-  password: process.env.DB_PASSWORD || '',
-  synchronize: Boolean(process.env.DB_SYNCHRONIZE) || true,
-  logging: Boolean(process.env.TYPEORM_LOGGING) || false,
-  entities: ['dist/**/*.entity{.js}'],
-  migrations: ['dist/migrations/*.js'],
+export default () => {
+  config();
+  console.log(process.env);
+  return {
+    type: process.env.DB_DRIVER as any,
+    host: process.env.DB_HOST,
+    port: Number(process.env.DB_PORT),
+    database: process.env.DB_DATABASE_NAME,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD || '',
+    entities: [EmployeeEntity],
+    multipleStatements: true,
+    migrations: [CreateEmployeesTable1679767538379],
+  } as DataSourceOptions;
 };
-
-export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
-  imports: [ConfigModule],
-  inject: [ConfigService],
-  useFactory: async (): Promise<TypeOrmModuleOptions> => {
-    const envConfig: any = Object.assign({}, settings);
-    envConfig.entities = entities;
-    return envConfig;
-  },
-};
-
-console.log(settings);
-const dataSource: DataSource = new DataSource(settings);
-export default dataSource;
